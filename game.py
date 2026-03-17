@@ -23,38 +23,64 @@ familytype = random.choice(familytypelist)
 day = random.choice(daytype)
 
 ###############
-
-print(f"Welcome to the game of life, {playername}.\n")
-print(f"{openinghook} \n")
-print(f"Yours starts {birthplaces}. Your parents named you {name}, {namereasons}. \n")
-print(f"You were born in {city}, {country} to {familytype}.")
-print(f"On {day}, as you sip your tea, a great earthquake shakes the ground. \n")
-print(f"You look outside and see a great tower appear from the ground. As you wonder what is going on, you are suddenly teleported inside of the tower! \n")
-
-
-def enter(): 
-    entry = input(f"You look around and see a door with a 1 over it. Do you enter or not? | Y = Yes | N = No").upper()
-    if entry == "N":
-        print("You scramble away from the door, and try to find another way out. You can't find a way out, and are trapped for eternity. GAME OVER.")
-    elif entry == "Y":
-        print("You walk through the door slowly, and are immediately faced with 5 monsters. You scream, and notice a weapon on the floor. You pick it up, and get ready to fight. \n")
-    else:
-        print("Invalid input. Please enter Y or N.")
-        enter()
-
-def combat():
-    health = 100
-    monsterhealth = 50
-    damage = 10
-
-#with open('user_data.json', 'w') as json_file:
- #   json.dump(user_data, json_file, indent=4) # 'indent=4' makes the file human-readable
-
-enter()
+def main():
+    combat()
+    print(f"Welcome to the game of life, {playername}.\n")
+    print(f"{openinghook} \n")
+    print(f"Yours starts {birthplaces}. Your parents named you {name}, {namereasons}. \n")
+    print(f"You were born in {city}, {country} to {familytype}.")
+    print(f"On {day}, as you sip your tea, a great earthquake shakes the ground. \n")
+    print(f"You look outside and see a great tower appear from the ground. As you wonder what is going on, you are suddenly teleported inside of the tower! \n")
 
 
+    def enter(): 
+        combat()
+        entry = input(f"You look around and see a door with a 1 over it. Do you enter or not? | Y = Yes | N = No").upper()
+        if entry == "N":
+            print("You scramble away from the door, and try to find another way out. You can't find a way out, and are trapped for eternity. GAME OVER.")
+        elif entry == "Y":
+            print("You walk through the door slowly, and are immediately faced with 5 monsters. You scream, and notice a weapon on the floor. You pick it up, and get ready to fight. \n")
+            combat()
+        else:
+            print("Invalid input. Please enter Y or N.")
+            enter()
 
-with open('data.json', 'r') as json_file:
-    data = json.load(json_file)
-for n in data["listy"]:
-    print(n)
+    def combat():
+        print("You have entered combat with the monsters. You can either attack or defend. If you attack, you will deal damage to the monster, but they will also deal damage to you. If you defend, you will block some of the damage from the monster's attack, but you won't deal any damage to them. Choose wisely! \n")
+        health = 100
+        monsterhealth = 50
+        monsterdamage = 10
+        yourdamage = 15
+        while True:
+        #health > 0:
+        #and monsterhealth > 0:
+            action = input("Do you attack or defend? | A = Attack | D = Defend").upper()
+            if action == "A":
+                monsterhealth -= yourdamage
+                print(f"You attack the monster and deal {yourdamage} damage. The monster's health is now {monsterhealth}.")
+                if monsterhealth <= 0:
+                    print("You have defeated the monster! You win!")
+                    break
+                health -= monsterdamage
+                print(f"The monster attacks you and deals {monsterdamage} damage. Your health is now {health}.")
+            elif action == "D":
+                health -= monsterdamage/2
+                print(f"You block the monster's attack and take {monsterdamage/2} damage/ Your health is now {health}.")
+                break
+            else:
+                print("Invalid input. Please enter A or D.")
+
+    #with open('user_data.json', 'w') as json_file:
+    #   json.dump(user_data, json_file, indent=4) # 'indent=4' makes the file human-readable
+
+    #enter()
+
+
+
+    with open('data.json', 'r') as json_file:
+        data = json.load(json_file)
+    for n in data["listy"]:
+        print(n)
+
+if __name__ == "__main__":
+    main()
